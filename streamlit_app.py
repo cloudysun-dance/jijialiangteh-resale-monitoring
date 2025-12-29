@@ -242,8 +242,22 @@ top20_display = top20[[
     "flat_model","lease_commence_date","remaining_lease","resale_price","Potential Score","Why Recommended"
 ]].copy()
 top20_display["Potential Score"] = top20_display["Potential Score"].astype(int)
+top20_display.rename(columns={
+    "month":"Month Sold",
+    "town":"Town",
+    "flat_type":"Flat Type",
+    "block":"Block",
+    "street_name":"Street Name",
+    "storey_range":"Storey Range",
+    "floor_area_sqm":"Floor Area (sqm)",
+    "flat_model":"Flat Model",
+    "remaining_lease":"Remaining Lease",
+    "resale_price":"Resale Price ($k)",
+    "potential_score":"Potential Score"
+}, inplace=True)
 
-st.subheader("💡 Top 20 Potential Purchase Flats (Interactive Table)")
+
+st.subheader("💡 Top 20 Potential Purchase Flats")
 st.dataframe(
     top20_display.style.bar(subset=["Potential Score"], color=['#E74C3C','#2ECC71']),
     height=600
