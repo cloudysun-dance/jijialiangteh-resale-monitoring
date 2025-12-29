@@ -178,18 +178,26 @@ st.plotly_chart(fig_violin, use_container_width=True)
 # Average Resale Price by Street Name
 # -----------------------------
 st.subheader("🌡️ Average Resale Price by Street Name")
-street_stats = filtered.groupby("street_name").agg(avg_price=("resale_price","mean"),count=("resale_price","count")).reset_index()
-street_stats["avg_price_k"]=street_stats["avg_price"]/1000
+street_data = filtered.groupby("street_name").agg(
+    avg_price=('resale_price','mean')
+).reset_index()
+street_data["avg_price_k"] = (street_data["avg_price"]/1000).round(0)
+street_data = street_data.sort_values("avg_price_k", ascending=False)
+
 fig_street = px.bar(
-    street_stats,
+    street_data,
     x="street_name",
     y="avg_price_k",
     text="avg_price_k",
+    labels={"street_name":"Street Name","avg_price_k":"Avg Price ($k)"},
     color="avg_price_k",
-    color_continuous_scale=px.colors.sequential.Tealgrn,
-    labels={"avg_price_k":"Avg Price ($k)","street_name":"Street"}
+    color_continuous_scale=px.colors.sequential.Tealgrn
 )
-fig_street.update_layout(yaxis_title="Avg Resale Price ($k)", xaxis_title="Street Name")
+fig_street.update_layout(
+    xaxis_tickangle=-45,
+    xaxis_title="Street Name",
+    yaxis_title="Average Resale Price ($k)"
+)
 st.plotly_chart(fig_street, use_container_width=True)
 
 # -----------------------------
